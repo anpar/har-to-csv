@@ -47,6 +47,7 @@ public class HarFile extends TextFile {
 		
 		// CSV headers
 		csvBuffer.append("url" + csvDelimiter
+			+ "httpVersion"+ csvDelimiter
 			+ "method" + csvDelimiter
 			+ "startedDateTime" + csvDelimiter
 			+ "time" + csvDelimiter
@@ -97,6 +98,7 @@ public class HarFile extends TextFile {
 		
 		// General keys
 		csvLineBuffer.append(processKey(requestObject, "url") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject, "httpVersion") + csvDelimiter);
 		csvLineBuffer.append(processKey(requestObject, "method") + csvDelimiter);
 		csvLineBuffer.append(processKey(jsonObject, "startedDateTime") + csvDelimiter);
 		csvLineBuffer.append(processKey(jsonObject, "time") + csvDelimiter);
