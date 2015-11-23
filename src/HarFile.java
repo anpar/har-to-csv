@@ -1,5 +1,3 @@
-package ar.com.yamamoto.hartools;
-
 import org.apache.wink.json4j.*;
 import java.io.*;
 import java.nio.charset.UnsupportedCharsetException;

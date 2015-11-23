@@ -1,5 +1,3 @@
-package ar.com.yamamoto.cliutils;
-
 import java.util.HashMap;
 
 public class CliArgs {

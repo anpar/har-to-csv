@@ -1,7 +1,3 @@
-package ar.com.yamamoto.hartools;
-
-import ar.com.yamamoto.cliutils.CliArgs;
-
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import org.apache.wink.json4j.JSONException;

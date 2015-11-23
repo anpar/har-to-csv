@@ -1,5 +1,3 @@
-package ar.com.yamamoto.hartools;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
