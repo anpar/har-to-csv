@@ -8,3 +8,6 @@ Pour convertir le fichier in.har en un fichier csv complet :
 
 Pour obtenir uniquement la liste des domaines :
 `make compile`
+
+# Crédit
+Inspiré de https://github.com/spcgh0st/HarTools.
