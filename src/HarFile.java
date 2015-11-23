@@ -46,24 +46,22 @@ public class HarFile extends TextFile {
 		StringBuilder csvBuffer = new StringBuilder();
 		
 		// CSV headers
-		csvBuffer.append("url" + csvDelimiter
-			+ "httpVersion"+ csvDelimiter
-			+ "method" + csvDelimiter
-			+ "startedDateTime" + csvDelimiter
-			+ "time" + csvDelimiter
-			+ "Response status" + csvDelimiter
-			+ "Response content mimeType" + csvDelimiter
-			+ "Response content size" + csvDelimiter
-			+ "Response headersSize" + csvDelimiter
-			+ "Response bodySize" + csvDelimiter
-			+ "Referer" + csvDelimiter);
-		
-		for(int i = 0; i < timingNames.length; i++) {
-			csvBuffer.append("Timing " + timingNames[i]);
-			if(i + 1 < timingNames.length) {
-				csvBuffer.append(csvDelimiter);
-			}
-		}
+		csvBuffer.append("Status Code" + csvDelimiter
+			+ "Methode"+ csvDelimiter
+			+ "HTTP Version rec" + csvDelimiter
+			+ "Domain" + csvDelimiter
+			+ "File" + csvDelimiter
+			+ "Content type" + csvDelimiter
+			+ "Accept language" + csvDelimiter
+			+ "Referer" + csvDelimiter
+			+ "Cookie" + csvDelimiter
+			+ "Connexion" + csvDelimiter
+			+ "Cache control" + csvDelimiter
+			+ "HTTP Version resp" + csvDelimiter
+			+ "Set Cookie" + csvDelimiter
+			+ "Content Language" + csvDelimiter
+			+ "Keep-Alive" + csvDelimiter
+			+ "Connexion" + csvDelimiter);
 		
 		csvBuffer.append(LINE_ENDING);
 		
@@ -94,31 +92,37 @@ public class HarFile extends TextFile {
 		JSONObject requestObject = jsonObject.getJSONObject("request");
 		JSONObject responseObject = jsonObject.getJSONObject("response");
 		JSONObject contentObject = responseObject.getJSONObject("content");
-		JSONObject timingsObject = jsonObject.getJSONObject("timings");
 		
 		// General keys
-		csvLineBuffer.append(processKey(requestObject, "url") + csvDelimiter);
-		csvLineBuffer.append(processKey(requestObject, "httpVersion") + csvDelimiter);
-		csvLineBuffer.append(processKey(requestObject, "method") + csvDelimiter);
-		csvLineBuffer.append(processKey(jsonObject, "startedDateTime") + csvDelimiter);
-		csvLineBuffer.append(processKey(jsonObject, "time") + csvDelimiter);
 		csvLineBuffer.append(processKey(responseObject, "status") + csvDelimiter);
-		csvLineBuffer.append(processKey(contentObject, "mimeType") + csvDelimiter);
-		csvLineBuffer.append(processKey(contentObject, "size") + csvDelimiter);
-		csvLineBuffer.append(processKey(responseObject, "headersSize") + csvDelimiter);
-		csvLineBuffer.append(processKey(responseObject, "bodySize") + csvDelimiter);
-		csvLineBuffer.append(processKey(
-				requestObject.getJSONArray("headers"), "Referer") + csvDelimiter);
-		
-		// Timing keys
-		for(int i = 0; i < timingNames.length; i++) {			
-			csvLineBuffer.append(processKey(timingsObject, timingNames[i]));
-			if(i + 1 < timingNames.length) {
-				csvLineBuffer.append(csvDelimiter);
-			}
-		}
+		csvLineBuffer.append(processKey(requestObject, "method") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject, "httpVersion") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Host") + csvDelimiter);
+		csvLineBuffer.append(truncate(processKey(requestObject.getJSONArray("headers"), "url")) + csvDelimiter);
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "Content-Type") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Accept-Language") + csvDelimiter);
+		csvLineBuffer.append(truncate(processKey(requestObject.getJSONArray("headers"), "Referer")) + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Cookie") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Connection") + csvDelimiter);
+		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Cache-Control") + csvDelimiter);
+
+
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "httpVersion") + csvDelimiter);
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "Set-Cookie") + csvDelimiter);
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "Content-Language") + csvDelimiter);
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "Keep-Alive") + csvDelimiter);
+		csvLineBuffer.append(processKey(responseObject.getJSONArray("headers"), "Connection") + csvDelimiter);
 						
 		return csvLineBuffer.toString();
+	}
+
+	
+	public String truncate(String s){
+		if(s.length()>50){
+			return s.substring(0,50)+" (trunc.)"; //truncated
+		} else {
+			return s;
+		}
 	}
 
 	/**
