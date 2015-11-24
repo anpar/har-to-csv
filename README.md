@@ -1,5 +1,7 @@
 Outil pour convertir les fichiers .har fournit par Mozilla Firefox en .csv.
 
+Les commandes suivantes sont réalisables une fois positionné dans le répertoire src.
+
 Pour compiler :
 `make compile`
 
