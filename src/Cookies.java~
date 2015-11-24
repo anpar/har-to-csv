@@ -1,3 +1,4 @@
+
 import org.apache.wink.json4j.*;
 import java.io.*;
 import java.nio.charset.UnsupportedCharsetException;
@@ -85,28 +86,57 @@ public class Cookies extends TextFile {
 		csvLineBuffer.append(processKey(responseObject, "status") + csvDelimiter);
 		csvLineBuffer.append(processKey(requestObject, "method") + csvDelimiter);
 		csvLineBuffer.append(processKey(requestObject.getJSONArray("headers"), "Host") + csvDelimiter);
-		plotCookies(responseObject.getJSONArray("cookies").toString(), csvLineBuffer);
+		plotCookies(requestObject.getJSONArray("cookies").toString(), csvLineBuffer, "[REQ]");
+		plotCookies(responseObject.getJSONArray("cookies").toString(), csvLineBuffer, "[ANS]");
 						
 		return csvLineBuffer.toString();
 	}
 	
-	public void plotCookies(String jsons, StringBuilder bl){
+	private void plotCookies(String jsons, StringBuilder bl, String arg){
 		String tmp = truncate2(jsons);
 		String[] tab = tmp.split(",");
 		String name ="";
 		String value = "";
 		for(int i=0;i<tab.length;i++){
-			if(i % 2 ==0){
-			String[] tm = tab[i].split("\"");
-			name = tm[tm.length-1];
-			} else {
-			String[] tm = tab[i].split("\"");
-			value = tm[tm.length];
-			bl.append("Name: "+name + " Value: "+value + csvDelimiter);
+			int a = getIndexName(tab,i, tab.length);
+			int b = getIndexValue(tab,i, tab.length);
+			if(a!=-1 && b!=-1){
+			String[] ta = tab[a].split(":");
+			String[] tb = tab[b].split(":");
+			name = ta[1];
+			value = tb[1]
+			bl.append(arg+" Name: "+name + " Value: "+value + csvDelimiter);
 			}
 		}
 	}
 
+	private int getIndexName(String[] array, int start, int max){
+		int retour =-1;
+		int i=start;
+		boolean ok = true;
+		while(ok && i<max){
+			if(array[i].contains("name")){
+				retour=i;
+				ok=false;
+			}
+			i++;
+		}
+		return retour;
+	}
+
+	private int getIndexValue(String[] array, int start, int max){
+		int retour =-1;
+		int i=start;
+		boolean ok = true;
+		while(ok && i<max){
+			if(array[i].contains("value")){
+				retour=i;
+			}
+			i++;
+		}
+		return retour;
+	}
+	
 	public String truncate2(String s){
 		if(s.length()>=4){
 			return s.substring(1, s.length()-1);
@@ -196,3 +226,4 @@ public class Cookies extends TextFile {
 			csvDelimiter = delimiter;
 	}
 }
+
