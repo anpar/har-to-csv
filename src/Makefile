@@ -1,4 +1,5 @@
 compile:
+	mkdir out -p
 	javac CliArgs.java
 	javac TextFile.java
 	javac -cp .:wink-json4j-1.1.2-incubating.jar HarFile.java
